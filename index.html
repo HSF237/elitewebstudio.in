@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Webstudio - Cyberpunk Digital Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #ff00ff;
+            --secondary: #00ffff;
+            --accent: #ffff00;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #ffffff;
+            --gray: #888888;
+            --light-gray: #222222;
+            --transition: all 0.3s ease;
+            --shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            --shadow-lg: 0 0 30px rgba(0, 255, 255, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        body.light-mode {
+            background-color: #f5f5f5;
+            color: #121212;
+        }
+
+        body.light-mode .logo {
+            color: #121212;
+        }
+
+        body.light-mode .nav-link {
+            color: #121212;
+        }
+
+        body.light-mode .hero-title {
+            color: #121212;
+        }
+
+        body.light-mode .section-title {
+            color: #121212;
+        }
+
+        body.light-mode .timeline-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #121212;
+        }
+
+        body.light-mode .service-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #121212;
+        }
+
+        body.light-mode .portfolio-item {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.light-mode .testimonial-slider {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #121212;
+        }
+
+        body.light-mode .contact-form {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #121212;
+        }
+
+        body.light-mode footer {
+            background-color: #f0f0f0;
+            color: #121212;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary), transparent);
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--secondary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.3s ease;
+            opacity: 0.5;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--darker);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-content {
+            text-align: center;
+        }
+
+        .preloader-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            position: relative;
+            animation: glitch 2s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0.05em 0 0 var(--secondary), -0.05em -0.025em 0 var(--accent), 0.025em 0.05em 0 var(--secondary); }
+            15% { text-shadow: 0.05em 0 0 var(--secondary), -0.05em -0.025em 0 var(--accent), 0.025em 0.05em 0 var(--secondary); }
+            16% { text-shadow: -0.05em -0.025em 0 var(--secondary), 0.025em 0.025em 0 var(--accent), -0.05em -0.05em 0 var(--secondary); }
+            49% { text-shadow: -0.05em -0.025em 0 var(--secondary), 0.025em 0.025em 0 var(--accent), -0.05em -0.05em 0 var(--secondary); }
+            50% { text-shadow: 0.025em 0.05em 0 var(--secondary), 0.05em 0 0 var(--accent), 0 -0.05em 0 var(--secondary); }
+            99% { text-shadow: 0.025em 0.05em 0 var(--secondary), 0.05em 0 0 var(--accent), 0 -0.05em 0 var(--secondary); }
+        }
+
+        .preloader-bar {
+            width: 300px;
+            height: 4px;
+            background-color: var(--light-gray);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preloader-progress {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+            animation: loading 2s forwards;
+        }
+
+        @keyframes loading {
+            to { width: 100%; }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: var(--transition);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 0, 255, 0.3);
+            min-height: 64px; /* or adjust to your preferred nav height */
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo img {
+            height: 48px;
+            width: auto;
+            margin-right: 10px;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            color: var(--secondary);
+            transform: rotate(180deg);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--light);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+        }
+
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: grid-move 20s linear infinite;
+        }
+
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .hero-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: glitch 3s infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.7);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--light);
+            border: 2px solid var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .scroll-text {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .scroll-arrow {
+            width: 30px;
+            height: 50px;
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            display: flex;
+            justify-content: center;
+            padding-top: 10px;
+        }
+
+        .scroll-arrow::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: scrollBounce 2s infinite;
+        }
+
+        @keyframes scrollBounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(10px);
+            }
+            60% {
+                transform: translateY(5px);
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            background-color: var(--darker);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(255, 0, 255, 0.1), transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.1), transparent 50%);
+            z-index: 0;
+        }
+
+        .section-header {
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card {
+            background-color: rgba(10, 10, 10, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            color: var(--secondary);
+            transform: scale(1.2);
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .feature-description {
+            color: var(--gray);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 255, 0.1));
+            position: relative;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cta-description {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            background-color: var(--dark);
+            border-top: 1px solid rgba(255, 0, 255, 0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-logo {
+            display: inline-flex;
+            align-items: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-social {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(10, 10, 10, 0.7);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .footer-social:hover {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transform: translateY(-3px);
+        }
+
+        .footer-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.7);
+        }
+
+        /* Contact Form */
+        #contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        #contact-form input,
+        #contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 1rem;
+            color: var(--dark);
+            background-color: transparent;
+            transition: var(--transition);
+        }
+
+        #contact-form input:focus,
+        #contact-form textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+        }
+
+        #contact-form button {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #contact-form button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: -1;
+            transition: var(--transition);
+        }
+
+        #contact-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.7);
+        }
+
+        /* Chatbot Widget */
+        #chatbot-button {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            z-index: 9999;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 0 20px #ff00ff80;
+            font-size: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #chatbot {
+            display: none;
+            flex-direction: column;
+            position: fixed;
+            bottom: 160px;
+            right: 30px;
+            width: 320px;
+            max-width: 90vw;
+            height: 420px;
+            z-index: 9999;
+            background: #181818;
+            border-radius: 18px;
+            box-shadow: 0 0 30px #00ffff80;
+            overflow: hidden;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        #chatbot-header {
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #chatbot-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        #close-chat {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        #chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #222;
+            font-size: 1rem;
+        }
+
+        #user-input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 30px;
+            border: none;
+            background: #222;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .chat-message {
+            margin-bottom: 0.7rem;
+            padding: 0.6rem 1rem;
+            border-radius: 18px;
+            max-width: 85%;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+
+        .chat-message.user {
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            color: #fff;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .chat-message.bot {
+            background: #333;
+            color: #fff;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                gap: 0;
+                border-bottom: 1px solid rgba(255,0,255,0.2);
+                z-index: 1001;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            }
+            .nav-links.active {
+                display: flex;
+            }
+            .nav-link {
+                padding: 1.2rem 2rem;
+                border-bottom: 1px solid rgba(255,0,255,0.08);
+                font-size: 1.2rem;
+            }
+            .mobile-menu-toggle {
+                display: block;
+            }
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.4rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            #contact-form {
+                padding: 1.5rem;
+            }
+
+            #contact-form button {
+                font-size: 1rem;
+            }
+
+            #chatbot {
+                width: 90%;
+                height: 350px;
+                bottom: 120px;
+                right: 5vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo">ELITE</div>
+            <div class="preloader-bar">
+                <div class="preloader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="log.png" alt="Elite Logo">
+                ELITE
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="portfolio.html" class="nav-link">Portfolio</a></li>
+                <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-particles" id="particles"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">ELITE WEBSTUDIO</h1>
+            <p class="hero-subtitle">Cyberpunk Digital Experiences</p>
+            <div class="hero-buttons">
+                <a href="services.html" class="btn btn-primary">Our Services</a>
+                <a href="portfolio.html" class="btn btn-secondary">View Portfolio</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll Down</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-header">
+            <h2 class="section-title">Why Choose Elite Webstudio</h2>
+            <p class="section-subtitle">We deliver cutting-edge digital solutions that set your brand apart</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="feature-title">Innovation</h3>
+                <p class="feature-description">We stay ahead of the curve with the latest technologies and design trends to create future-proof digital experiences.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="feature-title">Expert Team</h3>
+                <p class="feature-description">Our talented professionals bring years of experience and creative expertise to every project.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="feature-title">Results-Driven</h3>
+                <p class="feature-description">We focus on delivering measurable results that drive growth and success for your business.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Transform Your Digital Presence?</h2>
+            <p class="cta-description">Let's create something extraordinary together</p>
+            <a href="contact.html" class="btn btn-primary">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="section-header">
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-subtitle">We'd love to hear from you</p>
+        </div>
+
+        <form id="contact-form">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <input type="text" id="subject" placeholder="Subject" required>
+            <textarea id="message" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <a href="index.html" class="footer-logo">ELITE</a>
+            <div class="footer-socials">
+                <a href="#" class="footer-social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-dribbble"></i></a>
+            </div>
+            <p class="footer-text">&copy; 2023 Elite Webstudio. All rights reserved.</p>
+        </div>
+    </footer>
+    
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top" id="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <button id="chatbot-button" style="position:fixed;bottom:90px;right:30px;z-index:9999;background:linear-gradient(135deg,#ff00ff,#00ffff);color:#fff;border:none;border-radius:50%;width:60px;height:60px;box-shadow:0 0 20px #ff00ff80;font-size:2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-robot"></i>
+    </button>
+    <div id="chatbot" style="display:none;flex-direction:column;position:fixed;bottom:160px;right:30px;width:320px;max-width:90vw;height:420px;z-index:9999;background:#181818;border-radius:18px;box-shadow:0 0 30px #00ffff80;overflow:hidden;">
+        <div style="background:linear-gradient(90deg,#ff00ff,#00ffff);padding:1rem;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:#fff;"><i class="fas fa-robot"></i> AI Chatbot</span>
+            <button id="close-chat" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chat-body" style="flex:1;overflow-y:auto;padding:1rem;background:#222;"></div>
+        <div style="padding:0.75rem;background:#181818;border-top:1px solid #333;display:flex;gap:0.5rem;">
+            <input id="user-input" type="text" placeholder="Type your message..." style="flex:1;padding:0.7rem 1rem;border-radius:30px;border:none;background:#222;color:#fff;font-size:1rem;outline:none;">
+            <button id="send-chat" style="background:linear-gradient(135deg,#ff00ff,#00ffff);border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;cursor:pointer;">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Check for saved theme preference or default to 'dark'
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.body.classList.toggle('light-mode', currentTheme === 'light');
+        
+        // Update theme icon
+        const themeIcon = document.querySelector('.theme-toggle i');
+        if (currentTheme === 'light') {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+
+        // Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.preloader').classList.add('hidden');
+            }, 2000);
+        });
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX - 10 + 'px';
+                cursorFollower.style.top = e.clientY - 10 + 'px';
+            }, 100);
+        });
+
+        // Cursor hover effects
+        const hoverElements = document.querySelectorAll('a, button');
+        
+        hoverElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(1.5)';
+                cursorFollower.style.transform = 'scale(1.5)';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursorFollower.style.transform = 'scale(1)';
+            });
+        });
+
+        // Particles in Hero Section
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            const size = Math.random() * 6 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            particle.style.left = posX + '%';
+            particle.style.top = posY + '%';
+            
+            const delay = Math.random() * 15;
+            particle.style.animationDelay = delay + 's';
+            
+            particlesContainer.appendChild(particle);
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            
+            // Save theme preference
+            const theme = body.classList.contains('light-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', theme);
+            
+            // Update theme icon
+            if (body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scroll-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            if (navLinks.classList.contains('active')) {
+                mobileMenuToggle.innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+
+        // Close menu when a link is clicked (for better UX)
+        const navLinkItems = document.querySelectorAll('.nav-link');
+        navLinkItems.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+
+        // Chatbot functionality
+        const chatbotButton = document.getElementById("chatbot-button");
+        const chatbot = document.getElementById("chatbot");
+        const closeChat = document.getElementById("close-chat");
+        const chatBody = document.getElementById("chat-body");
+        const userInput = document.getElementById("user-input");
+        const sendChat = document.getElementById("send-chat");
+
+        chatbotButton.onclick = () => {
+            chatbot.style.display = "flex";
+            userInput.focus();
+            if (chatBody.innerHTML === "") {
+                addBotMessage("Hi! 👋 I'm your AI assistant. How can I help you today?");
+            }
+        };
+        closeChat.onclick = () => { chatbot.style.display = "none"; };
+
+        function addBotMessage(message) {
+            const messageElement = document.createElement("div");
+            messageElement.innerHTML = `<div><b>Bot:</b> ${message}</div>`;
+            messageElement.classList.add("chat-message", "bot");
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        function addUserMessage(message) {
+            const messageElement = document.createElement("div");
+            messageElement.innerHTML = `<div style="text-align: right;"><b>You:</b> ${message}</div>`;
+            messageElement.classList.add("chat-message", "user");
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        function chatbotReply(message) {
+            let reply = "If you want more details contact us.";
+            if (message.includes("hello") || message.includes("hi")) reply = "Hi! 👋 How can I help you today?";
+            if (message.includes("how are you")) reply = "I'm great 😊 Thanks for asking! How about you?";
+            if (message.includes("price")) reply = "Our packages start from ₹2,999. Do you want details?";
+            if (message.includes("packages")) reply = "We have 3 packages: Basic, Standard, and Premium. Which one do you want to know more about?";
+            if (message.includes("basic package")) reply = "✅ Basic Package – ₹2,999: 1-page website, responsive design, free support.";
+            if (message.includes("standard package")) reply = "⭐ Standard Package – ₹5,999: 5-page website, animations, SEO, WhatsApp button.";
+            if (message.includes("premium package")) reply = "💎 Premium Package – ₹9,999: Full e-commerce site, AI chatbot, custom design, 1-year support.";
+            if (message.includes("timing") || message.includes("working hours")) reply = "We are available from 9 AM – 9 PM, all days!";
+            if (message.includes("contact")) reply = "📞 You can reach us on WhatsApp or use our website's contact form!";
+            if (message.includes("location") || message.includes("where")) reply = "We are based in Kannur, Kerala 🌴 but we work with clients online too!";
+            if (message.includes("payment")) reply = "We accept UPI, Bank Transfer, and PayPal 💳.";
+            if (message.includes("discount")) reply = "🎉 Yes! We offer special festival discounts. Contact us for details.";
+            if (message.includes("support")) reply = "We provide free 1-month support with all packages ✅.";
+            if (message.includes("domain")) reply = "A free .in domain is included with our Standard & Premium packages 🌐.";
+            if (message.includes("hosting")) reply = "Hosting is included in Standard and Premium packages for 1 year.";
+            if (message.includes("seo")) reply = "Yes! We provide SEO optimization in Standard and Premium packages 📈.";
+            if (message.includes("ecommerce")) reply = "Our Premium package includes a full e-commerce website 🛒.";
+            if (message.includes("ai") || message.includes("chatbot")) reply = "Yes, we can integrate an AI chatbot like this one 🤖.";
+            if (message.includes("update")) reply = "Yes, you can request updates anytime! Minor updates are free.";
+            if (message.includes("refund")) reply = "Refunds are available only before project work starts.";
+            if (message.includes("time") || message.includes("delivery")) reply = "Basic websites take 2–3 days, Standard takes 1 week, Premium takes 2–3 weeks.";
+            if (message.includes("experience")) reply = "We have built multiple professional websites and continue to grow 💻.";
+            if (message.includes("why choose you")) reply = "Because we provide professional, affordable, and fast websites with full support ✅.";
+            if (message.includes("thank you")) reply = "You're welcome! 😊";
+            if (message.includes("bye")) reply = "Goodbye! 👋 Have a nice day!";
+            return reply;
+        }
+        userInput.addEventListener("keypress", function(e) {
+            if (e.key === "Enter" && userInput.value.trim() !== "") {
+                let msg = userInput.value;
+                addUserMessage(msg);
+                userInput.value = "";
+                setTimeout(() => {
+                    let botReply = chatbotReply(msg.toLowerCase());
+                    addBotMessage(botReply);
+                }, 500);
+            }
+        });
+        sendChat.addEventListener("click", function() {
+            if (userInput.value.trim() !== "") {
+                let msg = userInput.value;
+                addUserMessage(msg);
+                userInput.value = "";
+                setTimeout(() => {
+                    let botReply = chatbotReply(msg.toLowerCase());
+                    addBotMessage(botReply);
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

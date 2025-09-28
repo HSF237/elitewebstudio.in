@@ -1,0 +1,24 @@
+/* Show nav-links as a vertical menu on mobile when active */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 10, 10, 0.98);
+        flex-direction: column;
+        gap: 0;
+        border-bottom: 1px solid rgba(255,0,255,0.2);
+        z-index: 1001;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .nav-links.active {
+        display: flex;
+    }
+    .nav-link {
+        padding: 1.2rem 2rem;
+        border-bottom: 1px solid rgba(255,0,255,0.08);
+        font-size: 1.2rem;
+    }
+}

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Elite Webstudio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        :root {
+            --primary: #ff00ff;
+            --secondary: #00ffff;
+            --accent: #ffff00;
+            --dark: #0a0a0a;
+            --darker: #050505;
+            --light: #ffffff;
+            --gray: #888888;
+            --light-gray: #222222;
+            --transition: all 0.3s ease;
+            --shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            --shadow-lg: 0 0 30px rgba(0, 255, 255, 0.7);
+        }
+        *,
+        *::before,
+        *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: none;
+        }
+        body.light-mode { background-color: #f5f5f5; color: #121212; }
+        body.light-mode .logo,
+        body.light-mode .nav-link,
+        body.light-mode .section-title { color: #121212; }
+        /* Custom Cursor */
+        .cursor {
+            position: fixed; width: 20px; height: 20px; border-radius: 50%;
+            background: radial-gradient(circle, var(--primary), transparent);
+            pointer-events: none; z-index: 9999; transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+        .cursor-follower {
+            position: fixed; width: 40px; height: 40px; border: 2px solid var(--secondary);
+            border-radius: 50%; pointer-events: none; z-index: 9998; opacity: 0.5;
+            transition: transform 0.3s ease;
+        }
+        /* Preloader */
+        .preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--darker); display: flex; justify-content: center; align-items: center;
+            z-index: 10000; transition: opacity 1s ease, visibility 1s ease;
+        }
+        .preloader.hidden { opacity: 0; visibility: hidden; }
+        .preloader-content { text-align: center; }
+        .preloader-logo {
+            font-family: 'Orbitron', sans-serif; font-size: 3rem; font-weight: 800;
+            color: var(--primary); text-transform: uppercase; letter-spacing: 3px;
+            margin-bottom: 2rem; animation: glitch 2s infinite;
+        }
+        @keyframes glitch {
+            0%, 100%, 15% { text-shadow: 0.05em 0 0 var(--secondary), -0.05em -0.025em 0 var(--accent), 0.025em 0.05em 0 var(--secondary); }
+            16%, 49% { text-shadow: -0.05em -0.025em 0 var(--secondary), 0.025em 0.025em 0 var(--accent), -0.05em -0.05em 0 var(--secondary); }
+            50%, 99% { text-shadow: 0.025em 0.05em 0 var(--secondary), 0.05em 0 0 var(--accent), 0 -0.05em 0 var(--secondary); }
+        }
+        .preloader-bar {
+            width: 300px; height: 4px; background-color: var(--light-gray);
+            border-radius: 2px; overflow: hidden; position: relative;
+        }
+        .preloader-progress {
+            height: 100%; width: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px; animation: loading 2s forwards;
+        }
+        @keyframes loading { to { width: 100%; } }
+        /* Navigation */
+        nav {
+            position: fixed; top: 0; width: 100%; background-color: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px); z-index: 1000; transition: var(--transition);
+            padding: 1rem 0; border-bottom: 1px solid rgba(255, 0, 255, 0.3);
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;
+        }
+        .logo {
+            display: flex; align-items: center; font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem; font-weight: 700; color: var(--primary); text-decoration: none;
+            transition: var(--transition); text-transform: uppercase; letter-spacing: 2px;
+        }
+        .logo:hover { transform: scale(1.05); text-shadow: 0 0 10px var(--primary); }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-link {
+            color: var(--light); text-decoration: none; font-weight: 500; position: relative;
+            transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.3s ease;
+        }
+        .nav-link:hover { color: var(--secondary); }
+        .nav-link:hover::after { width: 100%; }
+        .nav-actions { display: flex; gap: 1rem; align-items: center; }
+        .theme-toggle {
+            background: none; border: none; color: var(--light); font-size: 1.2rem; cursor: pointer; transition: var(--transition);
+            outline: none;
+        }
+        .theme-toggle:hover { color: var(--secondary); transform: rotate(180deg); }
+        .mobile-menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--light); cursor: pointer; outline: none; }
+        /* Page Header */
+        .page-header {
+            padding: 8rem 2rem 4rem; background: linear-gradient(135deg, var(--darker), var(--dark));
+            position: relative; text-align: center; overflow: hidden;
+        }
+        .page-header::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 0, 255, 0.1), transparent 70%); z-index: 0;
+        }
+        .page-title {
+            font-family: 'Orbitron', sans-serif; font-size: 4rem; margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 3px; position: relative; z-index: 1;
+        }
+        .page-subtitle {
+            font-size: 1.5rem; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; position: relative; z-index: 1;
+        }
+        /* Contact Section */
+        .contact { padding: 6rem 2rem; background-color: var(--darker); position: relative; overflow: hidden; }
+        .section-header { max-width: 800px; margin: 0 auto 2rem auto; text-align: center; }
+        .section-title {
+            font-family: 'Orbitron', sans-serif; font-size: 3rem; background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; position: relative;
+            display: inline-block; text-transform: uppercase; letter-spacing: 2px;
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 100px; height: 4px; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 2px;
+        }
+        .section-subtitle { font-size: 1.2rem; color: var(--gray); max-width: 600px; margin: 0 auto; text-transform: uppercase; letter-spacing: 1px; }
+        .contact-container {
+            max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; position: relative; z-index: 1;
+        }
+        .contact-info {
+            background-color: rgba(10, 10, 10, 0.7); border-radius: 15px; padding: 2rem;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3); border: 1px solid rgba(255, 0, 255, 0.3);
+        }
+        .contact-title { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: var(--gray); font-weight: 500; border-radius: 50px; }
+        .contact-form {
+            background-color: rgba(10, 10, 10, 0.7); border-radius: 15px; padding: 2rem;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3); border: 1px solid rgba(255, 0, 255, 0.3);
+        }
+        .form-group { margin-bottom: 1.5rem; position: relative; }
+        .form-input, .form-textarea {
+            width: 100%; padding: 1rem; background-color: rgba(10, 10, 10, 0.7);
+            border: 1px solid rgba(255, 0, 255, 0.3); border-radius: 8px; color: var(--light);
+            font-size: 1rem; transition: var(--transition); font-family: 'Rajdhani', sans-serif;
+        }
+        .form-input:focus, .form-textarea:focus {
+            outline: none; border-color: var(--primary); box-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+        .form-label {
+            position: absolute; top: 1rem; left: 1rem; color: var(--primary); background-color: rgba(10, 10, 10, 0.7);
+            padding: 0 0.5rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; pointer-events: none; transition: var(--transition);
+            transform: translateY(0); opacity: 1;
+        }
+        .form-input:focus + .form-label,
+        .form-input:not(:placeholder-shown) + .form-label,
+        .form-textarea:focus + .form-label,
+        .form-textarea:not(:placeholder-shown) + .form-label {
+            top: -0.8rem;
+            left: 1rem;
+            background: var(--darker);
+            color: var(--secondary);
+            font-size: 0.7rem;
+            opacity: 1;
+            padding: 0 0.4rem;
+            z-index: 2;
+            transform: translateY(-50%);
+        }
+        .form-textarea { min-height: 150px; resize: vertical; }
+        .form-submit {
+            width: 100%; padding: 1rem; background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: 600; cursor: pointer;
+            transition: var(--transition); position: relative; overflow: hidden; text-transform: uppercase; letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif; box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            outline: none;
+        }
+        .form-submit:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(255, 0, 255, 0.7); }
+        .form-submit::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent); transition: left 0.8s ease;
+        }
+        .form-submit:hover::before { left: 100%; }
+        /* Success Message */
+        .success-message {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background-color: rgba(16, 185, 129, 0.9); color: white; padding: 2rem; border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); font-family: 'Orbitron', sans-serif; font-size: 1.5rem; z-index: 10001;
+        }
+        .success-message.active { display: block; }
+        /* Footer Styles */
+        footer {
+            background: linear-gradient(90deg, var(--darker), var(--dark));
+            padding: 3rem 1rem 1.5rem 1rem;
+            color: var(--gray);
+            text-align: center;
+            border-top: 1px solid rgba(255,0,255,0.1);
+            margin-top: 4rem;
+        }
+        .footer-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            transition: color 0.2s;
+        }
+        .footer-logo:hover {
+            color: var(--secondary);
+        }
+        .footer-socials {
+            margin: 1rem 0 1.5rem 0;
+        }
+        .footer-social {
+            margin: 0 0.5rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            transition: color 0.2s;
+            display: inline-block;
+        }
+        .footer-social:hover {
+            color: var(--secondary);
+        }
+        .footer-text {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-top: 1rem;
+            letter-spacing: 1px;
+        }
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed; bottom: 2rem; right: 2rem; width: 50px; height: 50px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; display: flex;
+            align-items: center; justify-content: center; cursor: pointer; opacity: 0; visibility: hidden;
+            transition: var(--transition); z-index: 999; box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+        .scroll-top.visible { opacity: 1; visibility: visible; }
+        .scroll-top:hover { transform: translateY(-5px); box-shadow: 0 0 30px rgba(255, 0, 255, 0.7); }
+        /* Show nav-links as a vertical menu on mobile when active */
+        @media (max-width: 900px) {
+            .contact-container { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; position: absolute; top: 100%; left: 0; width: 100%;
+                background: rgba(10, 10, 10, 0.98); flex-direction: column; gap: 0; z-index: 1001;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            }
+            .nav-links.active { display: flex; }
+            .nav-link { padding: 1.2rem 2rem; border-bottom: 1px solid rgba(255,0,255,0.08); font-size: 1.2rem; }
+            .mobile-menu-toggle { display: block; }
+            .page-title { font-size: 3rem; }
+            .section-title { font-size: 2.5rem; }
+            .contact-container { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 576px) {
+            .page-title { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content">
+            <div class="preloader-logo">ELITE</div>
+            <div class="preloader-bar">
+                <div class="preloader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">ELITE</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="portfolio.html" class="nav-link">Portfolio</a></li>
+                <li><a href="testimonials.html" class="nav-link">Testimonials</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Contact Us</h1>
+        <p class="page-subtitle">Get In Touch With Our Team</p>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="section-header">
+            <h2 class="section-title">Reach Out</h2>
+            <p class="section-subtitle">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        </div>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3 class="contact-title">Get In Touch</h3>
+                <p class="contact-description">
+                    Have a project in mind? Fill out the form and we'll get back to you as soon as possible. You can also reach out to us directly using the contact information below.
+                </p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="contact-text">
+                            <h4>Location</h4>
+                            <p>123 Innovation Street, Tech City, TC 12345</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="contact-text">
+                            <h4>Phone</h4>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-text">
+                            <h4>Email</h4>
+                            <p>info@elitewebstudio.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="name" placeholder=" " required>
+                        <label for="name" class="form-label">Your Name</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-input" id="email" placeholder=" " required>
+                        <label for="email" class="form-label">Your Email</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="subject" placeholder=" " required>
+                        <label for="subject" class="form-label">Subject</label>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-textarea" id="message" placeholder=" " required></textarea>
+                        <label for="message" class="form-label">Your Message</label>
+                    </div>
+                    <button type="submit" class="form-submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Message -->
+    <div class="success-message" id="success-message">
+        <h3>Message Sent Successfully!</h3>
+        <p>Thank you for reaching out. We'll get back to you soon.</p>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top" id="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <button id="chatbot-button" style="position:fixed;bottom:90px;right:30px;z-index:9999;background:linear-gradient(135deg,#ff00ff,#00ffff);color:#fff;border:none;border-radius:50%;width:60px;height:60px;box-shadow:0 0 20px #ff00ff80;font-size:2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-robot"></i>
+    </button>
+    <div id="chatbot" style="display:none;flex-direction:column;position:fixed;bottom:160px;right:30px;width:320px;max-width:90vw;height:420px;z-index:9999;background:#181818;border-radius:18px;box-shadow:0 0 30px #00ffff80;overflow:hidden;">
+        <div style="background:linear-gradient(90deg,#ff00ff,#00ffff);padding:1rem;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'Orbitron',sans-serif;font-size:1.2rem;color:#fff;"><i class="fas fa-robot"></i> AI Chatbot</span>
+            <button id="close-chat" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chat-body" style="flex:1;overflow-y:auto;padding:1rem;background:#222;"></div>
+        <div style="padding:0.75rem;background:#181818;border-top:1px solid #333;display:flex;gap:0.5rem;">
+            <input id="user-input" type="text" placeholder="Type your message..." style="flex:1;padding:0.7rem 1rem;border-radius:30px;border:none;background:#222;color:#fff;font-size:1rem;outline:none;">
+            <button id="send-chat" style="background:linear-gradient(135deg,#ff00ff,#00ffff);border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.3rem;cursor:pointer;">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <a href="index.html" class="footer-logo">ELITE</a>
+            <div class="footer-socials">
+                <a href="#" class="footer-social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="footer-social"><i class="fab fa-dribbble"></i></a>
+            </div>
+            <p class="footer-text">&copy; 2023 Elite Webstudio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.body.classList.toggle('light-mode', currentTheme === 'light');
+        const themeIcon = document.querySelector('.theme-toggle i');
+        if (currentTheme === 'light') {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            localStorage.setItem('theme', theme);
+            if (theme === 'light') {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.preloader').classList.add('hidden');
+            }, 2000);
+        });
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX - 10 + 'px';
+                cursorFollower.style.top = e.clientY - 10 + 'px';
+            }, 100);
+        });
+        const hoverElements = document.querySelectorAll('a, button');
+        hoverElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(1.5)';
+                cursorFollower.style.transform = 'scale(1.5)';
+            });
+            element.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursorFollower.style.transform = 'scale(1)';
+            });
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            if (navLinks.classList.contains('active')) {
+                mobileMenuToggle.innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+        const navLinkItems = document.querySelectorAll('.nav-link');
+        navLinkItems.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+
+        // Scroll to Top Button
+        const scrollTopBtn = document.getElementById('scroll-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Chatbot functionality
+        const chatbotButton = document.getElementById("chatbot-button");
+        const chatbot = document.getElementById("chatbot");
+        const closeChat = document.getElementById("close-chat");
+        const chatBody = document.getElementById("chat-body");
+        const userInput = document.getElementById("user-input");
+        const sendChat = document.getElementById("send-chat");
+        chatbotButton.onclick = () => {
+            chatbot.style.display = "flex";
+            userInput.focus();
+            if (chatBody.innerHTML === "") {
+                addBotMessage("Hi! 👋 I'm your AI assistant. How can I help you today?");
+            }
+        };
+        closeChat.onclick = () => { chatbot.style.display = "none"; };
+        function addBotMessage(message) {
+            const messageElement = document.createElement("div");
+            messageElement.innerHTML = `<div><b>Bot:</b> ${message}</div>`;
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        function addUserMessage(message) {
+            const messageElement = document.createElement("div");
+            messageElement.innerHTML = `<div style="text-align: right;"><b>You:</b> ${message}</div>`;
+            chatBody.appendChild(messageElement);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        function chatbotReply(message) {
+            let reply = "if you want more details contact us.";
+            if (message.includes("hello") || message.includes("hi")) reply = "Hi! 👋 How can I help you today?";
+            if (message.includes("how are you")) reply = "I'm great 😊 Thanks for asking! How about you?";
+            if (message.includes("price")) reply = "Our packages start from ₹2,999. Do you want details?";
+            if (message.includes("packages")) reply = "We have 3 packages: Basic, Standard, and Premium. Which one do you want to know more about?";
+            if (message.includes("basic package")) reply = "✅ Basic Package – ₹2,999: 1-page website, responsive design, free support.";
+            if (message.includes("standard package")) reply = "⭐ Standard Package – ₹5,999: 5-page website, animations, SEO, WhatsApp button.";
+            if (message.includes("premium package")) reply = "💎 Premium Package – ₹9,999: Full e-commerce site, AI chatbot, custom design, 1-year support.";
+            if (message.includes("timing") || message.includes("working hours")) reply = "We are available from 9 AM – 9 PM, all days!";
+            if (message.includes("contact")) reply = "📞 You can reach us on WhatsApp or use our website's contact form!";
+            if (message.includes("location") || message.includes("where")) reply = "We are based in Kannur, Kerala 🌴 but we work with clients online too!";
+            if (message.includes("payment")) reply = "We accept UPI, Bank Transfer, and PayPal 💳.";
+            if (message.includes("discount")) reply = "🎉 Yes! We offer special festival discounts. Contact us for details.";
+            if (message.includes("support")) reply = "We provide free 1-month support with all packages ✅.";
+            if (message.includes("domain")) reply = "A free .in domain is included with our Standard & Premium packages 🌐.";
+            if (message.includes("hosting")) reply = "Hosting is included in Standard and Premium packages for 1 year.";
+            if (message.includes("seo")) reply = "Yes! We provide SEO optimization in Standard and Premium packages 📈.";
+            if (message.includes("ecommerce")) reply = "Our Premium package includes a full e-commerce website 🛒.";
+            if (message.includes("ai") || message.includes("chatbot")) reply = "Yes, we can integrate an AI chatbot like this one 🤖.";
+            if (message.includes("update")) reply = "Yes, you can request updates anytime! Minor updates are free.";
+            if (message.includes("refund")) reply = "Refunds are available only before project work starts.";
+            if (message.includes("time") || message.includes("delivery")) reply = "Basic websites take 2–3 days, Standard takes 1 week, Premium takes 2–3 weeks.";
+            if (message.includes("experience")) reply = "We have built multiple professional websites and continue to grow 💻.";
+            if (message.includes("why choose you")) reply = "Because we provide professional, affordable, and fast websites with full support ✅.";
+            if (message.includes("thank you")) reply = "You're welcome! 😊";
+            if (message.includes("bye")) reply = "Goodbye! 👋 Have a nice day!";
+            return reply;
+        }
+        userInput.addEventListener("keypress", function(e) {
+            if (e.key === "Enter" && userInput.value.trim() !== "") {
+                let msg = userInput.value;
+                addUserMessage(msg);
+                userInput.value = "";
+                setTimeout(() => {
+                    let botReply = chatbotReply(msg.toLowerCase());
+                    addBotMessage(botReply);
+                }, 500);
+            }
+        });
+        sendChat.addEventListener("click", function() {
+            if (userInput.value.trim() !== "") {
+                let msg = userInput.value;
+                addUserMessage(msg);
+                userInput.value = "";
+                setTimeout(() => {
+                    let botReply = chatbotReply(msg.toLowerCase());
+                    addBotMessage(botReply);
+                }, 500);
+            }
+        });
+
+        // WhatsApp Contact Form Submission
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const subject = document.getElementById('subject').value.trim();
+                const message = document.getElementById('message').value.trim();
+                // WhatsApp number (with country code, no + or spaces)
+                const phoneNumber = '919876543210'; // <-- Replace with your WhatsApp number
+                const whatsappMessage =
+                    `Name: ${name}%0AEmail: ${email}%0ASubject: ${subject}%0AMessage: ${message}`;
+                const whatsappURL = `https://wa.me/${phoneNumber}?text=${whatsappMessage}`;
+                window.open(whatsappURL, '_blank');
+            });
+        }
+    </script>
+</body>
+</html>
